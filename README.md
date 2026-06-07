@@ -2,7 +2,7 @@
 
 一个基于 Electron + Live2D 的桌面宠物（桌宠），Hiyori 会在你桌面上呼吸、眨眼、互动。
 
-![screenshot](./resources/icon.png)
+
 
 ---
 
@@ -18,7 +18,7 @@ npm start
 # 启动 + 开发者工具
 npm run dev
 ```
-
+/*只需要将所有文件拉到你的本地一个文件夹中，在该文件夹下打开命令行输入启动桌宠的命令即可运行*/
 ---
 
 ## 功能一览
