@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; media-src 'self' blob:;">
+  <title>桌宠</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Live2D 渲染 Canvas -->
+  <canvas id="live2d-canvas"></canvas>
+
+  <!-- UI 叠加层 -->
+  <div id="bubble" class="bubble hidden"></div>
+  <div id="status-bar" class="status-bar">
+    <span id="status-mood">❤️ 80</span>
+    <span id="status-hunger">🍗 60</span>
+    <span id="status-energy">⚡ 80</span>
+  </div>
+  <div id="settings-panel" class="settings-panel hidden">
+    <button id="settings-close-x">✕</button>
+    <h3>⚙️ 设置</h3>
+    <label>
+      <input type="checkbox" id="setting-alwaysOnTop" checked>
+      始终置顶
+    </label>
+    <label>
+      <input type="checkbox" id="setting-bubble" checked>
+      显示气泡
+    </label>
+    <label>
+      <input type="checkbox" id="setting-idle" checked>
+      待机动作
+    </label>
+    <label>
+      <input type="checkbox" id="setting-walk">
+      散步模式 🚶
+    </label>
+    <label>
+      <span>透明度</span>
+      <input type="range" id="setting-opacity" min="0.3" max="1.0" step="0.1" value="1.0">
+    </label>
+    <label>
+      <span>大小</span>
+      <input type="range" id="setting-scale" min="0.5" max="2.0" step="0.1" value="1.0">
+      <span id="setting-scale-label">100%</span>
+    </label>
+    <div class="model-section">
+      <span class="model-section-label">🎨 模型</span>
+      <div id="model-selector" class="model-selector"></div>
+    </div>
+    <button id="settings-close">关闭</button>
+  </div>
+
+  <!-- 打字键盘 -->
+  <div id="typewriter-keyboard" class="typewriter-keyboard hidden">
+    <div class="tw-row">
+      <span class="tw-key tw-pink" data-key="Q">Q</span>
+      <span class="tw-key tw-pink" data-key="W">W</span>
+      <span class="tw-key tw-pink" data-key="E">E</span>
+      <span class="tw-key tw-pink" data-key="R">R</span>
+      <span class="tw-key tw-pink" data-key="T">T</span>
+      <span class="tw-key tw-pink" data-key="Y">Y</span>
+      <span class="tw-key tw-pink" data-key="U">U</span>
+      <span class="tw-key tw-pink" data-key="I">I</span>
+      <span class="tw-key tw-pink" data-key="O">O</span>
+      <span class="tw-key tw-pink" data-key="P">P</span>
+    </div>
+    <div class="tw-row">
+      <span class="tw-key tw-orange" data-key="A">A</span>
+      <span class="tw-key tw-orange" data-key="S">S</span>
+      <span class="tw-key tw-orange" data-key="D">D</span>
+      <span class="tw-key tw-orange" data-key="F">F</span>
+      <span class="tw-key tw-orange" data-key="G">G</span>
+      <span class="tw-key tw-orange" data-key="H">H</span>
+      <span class="tw-key tw-orange" data-key="J">J</span>
+      <span class="tw-key tw-orange" data-key="K">K</span>
+      <span class="tw-key tw-orange" data-key="L">L</span>
+    </div>
+    <div class="tw-row">
+      <span class="tw-key tw-blue" data-key="Z">Z</span>
+      <span class="tw-key tw-blue" data-key="X">X</span>
+      <span class="tw-key tw-blue" data-key="C">C</span>
+      <span class="tw-key tw-blue" data-key="V">V</span>
+      <span class="tw-key tw-blue" data-key="B">B</span>
+      <span class="tw-key tw-blue" data-key="N">N</span>
+      <span class="tw-key tw-blue" data-key="M">M</span>
+    </div>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="lib/l2d.js"></script>
+  <script src="core/live2d-loader.js"></script>
+  <script src="state/pet-state.js"></script>
+  <script src="state/timer.js"></script>
+  <script src="core/animation-controller.js"></script>
+  <script src="interaction/drag.js"></script>
+  <script src="interaction/click-handler.js"></script>
+  <script src="interaction/keyboard.js"></script>
+  <script src="interaction/walk.js"></script>
+  <script src="ui/bubble.js"></script>
+  <script src="ui/status-indicator.js"></script>
+  <script src="ui/typewriter-keyboard.js"></script>
+  <script src="core/app.js"></script>
+</body>
+</html>

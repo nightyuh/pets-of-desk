@@ -1,0 +1,295 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent !important;
+  -webkit-app-region: no-drag;
+}
+
+/* Live2D Canvas — 全窗口透明渲染 */
+#live2d-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;  /* 让鼠标事件穿透到 DOM 层控制 */
+}
+
+/* ─── 说话气泡 ──────────────────────────── */
+.bubble {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.92);
+  color: #333;
+  padding: 8px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 10;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid rgba(255, 255, 255, 0.92);
+}
+
+.bubble.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
+  pointer-events: none;
+}
+
+/* ─── 状态栏 ────────────────────────────── */
+.status-bar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 4px 12px;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ─── 设置面板 ──────────────────────────── */
+.settings-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  gap: 14px;
+  border-radius: 12px;
+}
+
+.settings-panel.hidden {
+  display: none;
+}
+
+.settings-panel {
+  position: relative;
+}
+
+#settings-close-x {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: rgba(0, 0, 0, 0.06);
+  color: #999;
+  font-size: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  z-index: 101;
+  line-height: 1;
+}
+
+#settings-close-x:hover {
+  background: rgba(0, 0, 0, 0.12);
+  color: #333;
+}
+
+.settings-panel h3 {
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.settings-panel label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+}
+
+.settings-panel label span {
+  min-width: 60px;
+}
+
+.settings-panel input[type="range"] {
+  flex: 1;
+}
+
+#settings-close {
+  margin-top: auto;
+  padding: 10px;
+  border: none;
+  background: #667eea;
+  color: white;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ─── 打字键盘 ──────────────────────────── */
+.typewriter-keyboard {
+  --kb-scale: 1;
+  position: absolute;
+  bottom: 48px;         /* 在状态栏上方 */
+  left: 50%;
+  transform: translateX(-50%) scale(var(--kb-scale, 1));
+  transform-origin: bottom center;
+  background: linear-gradient(145deg, #2a1f3d, #1a1428);
+  border-radius: 12px;
+  padding: 8px 10px 10px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  z-index: 15;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.typewriter-keyboard.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(12px) scale(var(--kb-scale, 1));
+  pointer-events: none;
+}
+
+/* 按键行 */
+.tw-row {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  margin-bottom: 3px;
+}
+.tw-row:last-child {
+  margin-bottom: 0;
+}
+
+/* 单个按键 */
+.tw-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.08s ease;
+  cursor: default;
+  letter-spacing: 0;
+  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+}
+
+/* 每行不同配色 */
+.tw-key.tw-pink {
+  background: linear-gradient(180deg, #f7a8c4, #e885a8);
+}
+.tw-key.tw-orange {
+  background: linear-gradient(180deg, #fcc88a, #f8b06a);
+}
+.tw-key.tw-blue {
+  background: linear-gradient(180deg, #8fc8f0, #6dafe0);
+}
+
+/* 发光动画 */
+.tw-key-glow {
+  transform: translateY(1px);
+  box-shadow:
+    0 0 8px rgba(255, 220, 150, 0.7),
+    0 0 16px rgba(255, 200, 100, 0.4),
+    0 1px 0 rgba(0, 0, 0, 0.15) !important;
+}
+
+.tw-key.tw-pink.tw-key-glow {
+  background: linear-gradient(180deg, #ffc4d8, #ff9ec0);
+  color: #fff;
+}
+.tw-key.tw-orange.tw-key-glow {
+  background: linear-gradient(180deg, #ffe0a0, #ffca80);
+  color: #fff;
+}
+.tw-key.tw-blue.tw-key-glow {
+  background: linear-gradient(180deg, #b0dcff, #88c8ff);
+  color: #fff;
+}
+
+/* ─── 模型选择器 ──────────────────────────── */
+.model-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.model-section-label {
+  font-size: 13px;
+  color: #666;
+}
+.model-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.model-btn {
+  padding: 5px 12px;
+  border: 1.5px solid #e0e0e0;
+  background: #f9f9f9;
+  color: #555;
+  border-radius: 14px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.model-btn:hover {
+  border-color: #b0b0b0;
+  background: #f0f0f0;
+  color: #333;
+}
+.model-btn-active {
+  border-color: #667eea;
+  background: #667eea;
+  color: #fff;
+}
+.model-btn-active:hover {
+  background: #5a6fd6;
+  border-color: #5a6fd6;
+  color: #fff;
+}
+
